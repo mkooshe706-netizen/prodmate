@@ -1,18 +1,50 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import '../global.css';
+import { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-
+// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <>
+      <StatusBar style="auto" />
+      <Stack screenOptions={{ headerShown: false }}>
+        {/* Main Tab Navigation */}
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        
+        {/* Auth Flow (hidden from tabs) */}
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        
+        {/* AI Assistant Modal - Pops up seamlessly over any screen */}
+        <Stack.Screen 
+          name="assistant-modal" 
+          options={{ 
+            presentation: 'modal',
+            headerShown: false,
+            animation: 'slide_from_bottom'
+          }} 
+        />
+      </Stack>
+    </>
   );
 }

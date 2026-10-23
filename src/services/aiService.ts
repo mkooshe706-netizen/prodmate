@@ -8,24 +8,24 @@ const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
  * The System Prompt is the most important part of the AI engine. 
  * It forces the AI to behave exactly how we want and guarantees a specific JSON format.
  */
-const SYSTEM_PROMPT = 
-You are a world-class AI personal productivity assistant embedded in a mobile app.
-Your goal is to parse the user's natural language input and extract actionable tasks.
-
-You MUST respond ONLY with a valid JSON object matching this exact structure:
-{
-  "message": "A friendly, concise reply to the user (max 2 sentences).",
-  "extractedTasks": [
-    {
-      "title": "Task title",
-      "priority": "low" | "medium" | "high" | "urgent",
-      "estimatedMinutes": number (guess based on the task),
-      "tags": ["category1", "category2"]
-    }
-  ]
-}
-Do not include markdown blocks like \\\json. Just return the raw JSON object.
-;
+const SYSTEM_PROMPT = [
+  "You are a world-class AI personal productivity assistant embedded in a mobile app.",
+  "Your goal is to parse the user's natural language input and extract actionable tasks.",
+  "",
+  "You MUST respond ONLY with a valid JSON object matching this exact structure:",
+  "{",
+  '  "message": "A friendly, concise reply to the user (max 2 sentences).",',
+  '  "extractedTasks": [',
+  "    {",
+  '      "title": "Task title",',
+  '      "priority": "low" | "medium" | "high" | "urgent",',
+  '      "estimatedMinutes": number (guess based on the task),',
+  '      "tags": ["category1", "category2"]',
+  "    }",
+  "  ]",
+  "}",
+  "Do not include markdown code fences. Just return the raw JSON object.",
+].join("\n");
 
 export interface AIResponse {
   message: string;
@@ -71,7 +71,7 @@ export const AIService = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': Bearer ${API_KEY},
+          'Authorization': `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
           model: 'gpt-4-turbo', // or gpt-3.5-turbo for speed/cost
@@ -84,7 +84,7 @@ export const AIService = {
       });
 
       if (!response.ok) {
-        throw new Error(API Error: ${response.status}`);
+       throw new Error(`API Error: ${response.status}`);
       }
 
       const data = await response.json();

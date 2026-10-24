@@ -74,12 +74,12 @@ export const AIService = {
           'Authorization': `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4-turbo', // or gpt-3.5-turbo for speed/cost
+          model: 'gpt-6-luna', // or gpt-3.5-turbo for speed/cost
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: userInput }
           ],
-          temperature: 0.2, // Low temperature for consistent, predictable JSON output
+           // Low temperature for consistent, predictable JSON output
         }),
       });
 

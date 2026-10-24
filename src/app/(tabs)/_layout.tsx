@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Tabs } from 'expo-router';
 import { View, Platform } from 'react-native';
 import { LayoutDashboard, CheckSquare, CalendarDays, User } from 'lucide-react-native';
@@ -9,6 +10,7 @@ const INACTIVE_COLOR = '#9CA3AF'; // Gray 400
 const TAB_BAR_BACKGROUND = '#FFFFFF'; // Dark mode could be #111827
 
 export default function TabLayout() {
+   const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -19,9 +21,9 @@ export default function TabLayout() {
           backgroundColor: TAB_BAR_BACKGROUND,
           borderTopWidth: 1,
           borderTopColor: '#F3F4F6', // Gray 100
-          paddingBottom: Platform.OS === 'ios' ? 24 : 12, // Handle safe area for iOS
+          paddingBottom: insets.bottom + 8,
           paddingTop: 12,
-          height: Platform.OS === 'ios' ? 88 : 68,
+          height: 56 + insets.bottom,
           elevation: 0, // Removes Android shadow for a flatter, modern look
           shadowOpacity: 0, // Removes iOS shadow
         },

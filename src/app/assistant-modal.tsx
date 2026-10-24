@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   View,
   Text,
@@ -19,6 +20,7 @@ type Message = { id: string; role: 'user' | 'ai'; text: string };
 
 export default function AssistantModal() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const scrollViewRef = useRef<ScrollView>(null);
   const addAIGeneratedTasks = useTaskStore((s) => s.addAIGeneratedTasks);
   const [inputText, setInputText] = useState('');
@@ -70,7 +72,10 @@ export default function AssistantModal() {
       className="flex-1 bg-neutral-50"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View className="flex-row items-center justify-between px-4 pt-4 pb-3 bg-white border-b border-border-light">
+         <View
+     className="flex-row items-center justify-between px-4 pb-3 bg-white border-b border-border-light"
+     style={{ paddingTop: insets.top + 12 }}
+   >
         <Text className="font-inter-bold text-lg text-neutral-900">
           AI Assistant
         </Text>
@@ -123,7 +128,10 @@ export default function AssistantModal() {
         )}
       </ScrollView>
 
-      <View className="px-4 py-4 bg-white border-t border-border-light mb-4">
+         <View
+     className="px-4 pt-4 bg-white border-t border-border-light"
+     style={{ paddingBottom: insets.bottom + 16 }}
+   >
         <View className="flex-row items-center bg-neutral-100 rounded-full px-4 py-2 border border-neutral-200">
           <TextInput
             className="flex-1 font-inter-regular text-base text-neutral-900 py-2"
